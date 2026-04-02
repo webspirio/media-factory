@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { ChevronRight, ChevronLeft, Target, Zap, Users, BarChart3, Calendar, MessageCircle, Globe, TrendingUp, Shield, CheckCircle, ArrowRight, ArrowDown, Play, Layers, Bot, ShoppingBag, Smartphone, Mail, Clock, DollarSign, AlertTriangle, Star, Eye, MousePointer, Send, Filter, Heart, Video, Image, Mic, Sparkles, Settings, PieChart, PhoneCall, MessageSquare, Search, UserCheck, CreditCard, Lock, Rocket, ChevronDown, Repeat } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ChevronRight, ChevronLeft, Target, Zap, Users, BarChart3, Calendar, MessageCircle, Globe, TrendingUp, Shield, CheckCircle, ArrowRight, ArrowDown, Layers, Bot, ShoppingBag, Mail, Clock, DollarSign, AlertTriangle, Star, Eye, Send, Filter, Video, Image, Sparkles, Settings, PhoneCall, Search, UserCheck, Lock, Rocket, Repeat, Maximize2, Minimize2 } from "lucide-react";
+import FunnelDiagram from "./funnel.jsx";
+import wsLogo from "./ws-logo.svg";
 
 const A = "#6366f1";
 const AL = "#818cf8";
@@ -14,8 +16,6 @@ const ER = "#ef4444";
 const CY = "#22d3ee";
 const PK = "#f472b6";
 const GR = "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)";
-const GR2 = "linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)";
-const GR3 = "linear-gradient(135deg, #059669 0%, #0ea5e9 100%)";
 
 function H({ icon: Icon, color, title, sub }) {
   return (
@@ -43,26 +43,17 @@ function Check({ children, color = OK, size = 11 }) {
   return <div style={{ display: "flex", alignItems: "flex-start", gap: 7, marginTop: 5 }}><CheckCircle size={size} color={color} style={{ marginTop: 1, flexShrink: 0 }} /><span style={{ color: T2, fontSize: 12, lineHeight: 1.5 }}>{children}</span></div>;
 }
 
-function Num({ n, children, color = A }) {
-  return (
-    <div style={{ display: "flex", gap: 12, alignItems: "flex-start", marginTop: 12 }}>
-      <div style={{ minWidth: 28, height: 28, borderRadius: "50%", background: GR, display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontSize: 13, fontWeight: 700 }}>{n}</div>
-      <div style={{ flex: 1 }}>{children}</div>
-    </div>
-  );
-}
-
 const slides = [
   // 0 — TITLE
-  () => (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: 40 }}>
+  ({ mobile }) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", textAlign: "center", padding: mobile ? 20 : 40 }}>
       <div style={{ width: 90, height: 90, borderRadius: 22, background: GR, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28, boxShadow: "0 20px 60px rgba(99,102,241,0.4)" }}>
         <Zap size={44} color="white" />
       </div>
-      <h1 style={{ fontSize: 38, fontWeight: 800, color: T1, margin: 0, lineHeight: 1.2 }}>
+      <h1 style={{ fontSize: mobile ? 24 : 38, fontWeight: 800, color: T1, margin: 0, lineHeight: 1.2 }}>
         Автоматическая воронка продаж
       </h1>
-      <h2 style={{ fontSize: 20, fontWeight: 400, color: AL, margin: "10px 0 0", letterSpacing: "0.03em" }}>
+      <h2 style={{ fontSize: mobile ? 15 : 20, fontWeight: 400, color: AL, margin: "10px 0 0", letterSpacing: "0.03em" }}>
         LR Health & Beauty — Полная автоматизация
       </h2>
       <div style={{ width: 60, height: 3, background: GR, borderRadius: 2, margin: "28px 0" }} />
@@ -86,10 +77,10 @@ const slides = [
   ),
 
   // 1 — CURRENT SITUATION
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={AlertTriangle} color={WR} title="Текущая ситуация" sub="Что сейчас не работает — и что уже есть" />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, flex: 1 }}>
+      <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 12, flex: 1 }}>
         {[
           { label: "Instagram + Facebook", status: "Неактивны", desc: "Нет регулярного контента, нет обработки лидов, нет автоматизации. Потенциальные клиенты пишут — но никто не отвечает вовремя.", color: ER },
           { label: "TikTok — 23 000 подписчиков", status: "Есть база!", desc: "Активный аккаунт с аудиторией. Это серьёзный актив — но нет воронки, которая превращает просмотры в клиентов и продажи.", color: OK },
@@ -116,12 +107,12 @@ const slides = [
   ),
 
   // 2 — GOAL / VISION
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Target} color={OK} title="Цель проекта" sub="Что мы построим" />
       <Card style={{ padding: 24, background: `linear-gradient(135deg, ${C1} 0%, #1a2744 100%)` }} border={`1px solid ${A}30`}>
         <h3 style={{ color: AL, fontSize: 16, margin: "0 0 16px", fontWeight: 700 }}>Полностью автоматическая воронка «контент → продажа»</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 16 }}>
           {[
             { step: "1", icon: Video, title: "ИИ создаёт контент", desc: "15-25+ Reels в неделю генерируются и публикуются на Instagram, Facebook и TikTok. Каждый ролик — это приглашение написать вам." },
             { step: "2", icon: Bot, title: "Бот общается за вас", desc: "Умный бот в Direct автоматически отвечает на комментарии и Stories, задаёт вопросы, определяет — человек хочет купить продукт, стать партнёром или просто «поболтать»." },
@@ -140,7 +131,7 @@ const slides = [
           ))}
         </div>
       </Card>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10, marginTop: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr", gap: 10, marginTop: 14 }}>
         {[
           { icon: Clock, value: "90%", label: "Меньше ручной работы", color: AL },
           { icon: Globe, value: "3", label: "Платформы одновременно", color: CY },
@@ -164,8 +155,8 @@ const slides = [
   ),
 
   // 3 — HOW IT WORKS: OVERALL ARCHITECTURE
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Layers} color={AL} title="Как это работает" sub="Полная схема системы" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
         {/* Layer 1 — Content */}
@@ -182,7 +173,7 @@ const slides = [
         </div>
         <div style={{ textAlign: "center" }}><ArrowDown size={16} color={T2} /></div>
         {/* Layer 2 — Platforms */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 8 }}>
           {[
             { name: "Instagram", feat: ["Reels + Stories", "Комментарий → Бот в Direct", "Story reply → Бот"], color: "#e11d48" },
             { name: "Facebook", feat: ["Авто-синхронизация с IG", "Messenger бот", "Расширение аудитории"], color: "#2563eb" },
@@ -209,7 +200,7 @@ const slides = [
         </div>
         <div style={{ textAlign: "center" }}><ArrowDown size={16} color={T2} /></div>
         {/* Layer 4 — Destinations */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 8 }}>
           {[
             { name: "LR Магазин", icon: ShoppingBag, desc: "Покупка продуктов через мостовую страницу", color: OK },
             { name: "Регистрация LR", icon: UserCheck, desc: "Новый партнёр по вашей ссылке", color: AL },
@@ -226,9 +217,16 @@ const slides = [
     </div>
   ),
 
-  // 4 — GOHIGHLEVEL: THE BRAIN
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 4 — FUNNEL DIAGRAM (interactive)
+  ({ mobile }) => (
+    <div style={{ height: "100%", overflow: "auto", WebkitOverflowScrolling: "touch" }}>
+      <FunnelDiagram compact={mobile} />
+    </div>
+  ),
+
+  // 5 — GOHIGHLEVEL: THE BRAIN
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Settings} color={CY} title="GoHighLevel — Мозг системы" sub="Одна платформа вместо десяти отдельных сервисов" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
         <div style={{ background: `${CY}08`, border: `1px solid ${CY}25`, borderRadius: 12, padding: "12px 18px" }}>
@@ -236,7 +234,7 @@ const slides = [
             <strong style={{ color: CY }}>Что это?</strong> <span style={{ color: T2 }}>GoHighLevel (GHL) — мощная платформа «всё в одном» для автоматизации маркетинга и продаж. Бот для Instagram/Facebook, CRM, календарь, email-маркетинг, WhatsApp, лендинги — всё внутри одной системы.</span>
           </p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
           {[
             { icon: Bot, title: "Бот в Instagram/FB", desc: "Человек комментирует Reels или отвечает на Story → бот автоматически пишет в Direct, задаёт вопросы, определяет интерес. Работает 24/7.", color: PK, what: "Комментарии + Stories + DM" },
             { icon: MessageCircle, title: "WhatsApp интеграция", desc: "Все сообщения из WhatsApp видны в одном месте. Горячие лиды получают уведомления прямо в WhatsApp. Отвечайте из одного окна.", color: OK, what: "Встроено нативно" },
@@ -272,9 +270,9 @@ const slides = [
     </div>
   ),
 
-  // 5 — BRIDGE PAGE
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 6 — BRIDGE PAGE
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Globe} color={CY} title="Мостовая страница (Bridge Page)" sub="Связующее звено между соц. сетями и LR" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
         <Card style={{ padding: "12px 18px", background: `${WR}08` }} border={`1px solid ${WR}30`}>
@@ -297,7 +295,7 @@ const slides = [
               </div>
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 14 }}>
             <div>
               <h5 style={{ color: T1, fontSize: 12, fontWeight: 700, margin: "0 0 8px" }}>Страница собирает:</h5>
               <Check>Email адрес — вы владеете контактом</Check>
@@ -321,7 +319,7 @@ const slides = [
             </div>
           </div>
         </Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 10 }}>
           <Card style={{ padding: 14 }}>
             <h5 style={{ color: T1, fontSize: 12, fontWeight: 700, margin: "0 0 8px" }}>Что мы делаем:</h5>
             <Check>Разрабатываем на вашем сайте (Elementor)</Check>
@@ -341,9 +339,9 @@ const slides = [
     </div>
   ),
 
-  // 6 — BOT FLOW DETAILED (with Stories)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 7 — BOT FLOW DETAILED (with Stories)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Bot} color={PK} title="Как работает бот" sub="Подробная схема автоматической переписки" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
         <Card style={{ padding: 16 }} border={`1px solid ${PK}30`}>
@@ -385,7 +383,7 @@ const slides = [
           <p style={{ color: T2, fontSize: 12, margin: 0, lineHeight: 1.6 }}>
             Бот задаёт 2-3 уточняющих вопроса и определяет «температуру» лида:
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 8, marginTop: 10 }}>
             {[
               { temp: "Холодный", desc: "«Просто смотрю» → email-воронка с полезным контентом. Бот прогревает автоматически.", color: "#3b82f6" },
               { temp: "Тёплый", desc: "Интересуется продуктом → ссылка на мостовую страницу + каталог + серия писем.", color: WR },
@@ -411,12 +409,12 @@ const slides = [
     </div>
   ),
 
-  // 7 — AI CONTENT FACTORY (no Zebracat)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 8 — AI CONTENT FACTORY (no Zebracat)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Video} color={PK} title="Фабрика ИИ-контента" sub="Как мы создаём 15-25+ Reels в неделю" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
           {[
             { name: "InVideo AI", icon: Sparkles, desc: "Вы пишете текст → ИИ создаёт готовое видео с озвучкой, музыкой и визуалом. Основной инструмент для генерации Reels на русском и немецком.", price: "$28-100/мес", features: ["Текст → полноценное видео", "Автоматическая озвучка", "50+ языков (DE + RU)", "Адаптация под Reels формат"], color: AL },
             { name: "Opus Clip", icon: Image, desc: "Берёт ваши существующие длинные видео и автоматически нарезает на короткие Reels. Находит самые «цепляющие» моменты.", price: "Бесплатно–$29/мес", features: ["Из длинного видео → 10 Reels", "ИИ находит лучшие моменты", "Автоматические субтитры", "Удаление водяных знаков"], color: OK },
@@ -447,7 +445,7 @@ const slides = [
             ].map((s, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                 <div style={{ background: s.bg, borderRadius: 8, padding: "6px 12px" }}>
-                  <div style={{ color: WR, fontSize: 9, fontWeight: 700 }}>{s.s}</div>
+                  <div style={{ color: WR, fontSize: 10, fontWeight: 700 }}>{s.s}</div>
                   <div style={{ color: T1, fontSize: 11 }}>{s.t}</div>
                 </div>
                 {i < 4 && <ArrowRight size={12} color={T2} />}
@@ -455,7 +453,7 @@ const slides = [
             ))}
           </div>
         </Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 10 }}>
           <Card style={{ padding: 14 }}>
             <h5 style={{ color: T1, fontSize: 12, fontWeight: 700, margin: "0 0 6px" }}>Темы контента:</h5>
             {["Личностный рост / «Найди себя»", "Здоровье и красота (Pflege & Gesundheit)", "Продукты LR — обзоры, отзывы", "Бизнес-возможности с LR", "Истории успеха клиентов/партнёров"].map((t, i) => (
@@ -476,13 +474,13 @@ const slides = [
     </div>
   ),
 
-  // 8 — EMAIL NURTURE + LEAD JOURNEY (NEW)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 9 — EMAIL NURTURE + LEAD JOURNEY (NEW)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Mail} color={CY} title="Email-воронки и прогрев лидов" sub="Что происходит после первого контакта" />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <Card style={{ padding: 16 }} border={`1px solid ${OK}30`}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 8 }}>
+          <Card style={{ padding: 14 }} border={`1px solid ${OK}30`}>
             <h4 style={{ color: OK, fontSize: 13, margin: "0 0 12px", fontWeight: 700 }}>Серия «Продукты LR»</h4>
             <p style={{ color: T2, fontSize: 11, margin: "0 0 10px", lineHeight: 1.5 }}>Для тех, кто интересуется продуктами здоровья и красоты:</p>
             {[
@@ -498,7 +496,7 @@ const slides = [
               </div>
             ))}
           </Card>
-          <Card style={{ padding: 16 }} border={`1px solid ${AL}30`}>
+          <Card style={{ padding: 14 }} border={`1px solid ${AL}30`}>
             <h4 style={{ color: AL, fontSize: 13, margin: "0 0 12px", fontWeight: 700 }}>Серия «Бизнес-возможность»</h4>
             <p style={{ color: T2, fontSize: 11, margin: "0 0 10px", lineHeight: 1.5 }}>Для тех, кто хочет стать партнёром LR:</p>
             {[
@@ -515,33 +513,31 @@ const slides = [
             ))}
           </Card>
         </div>
-        <Card style={{ padding: 16 }}>
-          <h4 style={{ color: T1, fontSize: 13, margin: "0 0 12px", fontWeight: 700 }}>Путь лида через систему:</h4>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", justifyContent: "center" }}>
-            {[
-              { label: "Увидел Reels", color: PK },
-              { label: "Написал боту", color: CY },
-              { label: "Квалификация", color: AL },
-              { label: "Email-серия", color: WR },
-              { label: "Мостовая стр.", color: A },
-              { label: "Покупка / Запись", color: OK },
-            ].map((s, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <span style={{ background: `${s.color}20`, color: s.color, padding: "5px 12px", borderRadius: 16, fontSize: 10, fontWeight: 600, border: `1px solid ${s.color}30` }}>{s.label}</span>
-                {i < 5 && <ArrowRight size={12} color={T2} />}
-              </div>
-            ))}
-          </div>
-        </Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <Card style={{ padding: 14, background: `${WR}08` }} border={`1px solid ${WR}30`}>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "10px 16px", background: C1, borderRadius: 12, border: `1px solid ${C2}`, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+          <span style={{ color: T2, fontSize: 10, fontWeight: 600, whiteSpace: "nowrap", marginRight: 4 }}>Путь лида:</span>
+          {[
+            { label: "Reels", color: PK },
+            { label: "Бот", color: CY },
+            { label: "Квалификация", color: AL },
+            { label: "Email", color: WR },
+            { label: "Мост. стр.", color: A },
+            { label: "Покупка", color: OK },
+          ].map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+              <span style={{ background: `${s.color}20`, color: s.color, padding: "3px 10px", borderRadius: 12, fontSize: 10, fontWeight: 600, border: `1px solid ${s.color}30`, whiteSpace: "nowrap" }}>{s.label}</span>
+              {i < 5 && <ArrowRight size={10} color={T2} />}
+            </div>
+          ))}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 8 }}>
+          <Card style={{ padding: 12, background: `${WR}08` }} border={`1px solid ${WR}30`}>
             <h5 style={{ color: WR, fontSize: 12, fontWeight: 700, margin: "0 0 6px" }}>Если лид не купил сразу:</h5>
             <Check color={WR}>Попадает в «прогревающую» серию писем</Check>
             <Check color={WR}>Получает полезный контент раз в 3-5 дней</Check>
             <Check color={WR}>Через 30 дней — повторное предложение</Check>
             <Check color={WR}>Бот может напомнить через Instagram через 2 недели</Check>
           </Card>
-          <Card style={{ padding: 14, background: `${OK}08` }} border={`1px solid ${OK}30`}>
+          <Card style={{ padding: 12, background: `${OK}08` }} border={`1px solid ${OK}30`}>
             <h5 style={{ color: OK, fontSize: 12, fontWeight: 700, margin: "0 0 6px" }}>Всё на двух языках:</h5>
             <Check>Немецкая серия — для DE-аудитории</Check>
             <Check>Русская серия — для RU/UA-аудитории</Check>
@@ -553,17 +549,17 @@ const slides = [
     </div>
   ),
 
-  // 9 — CRM PIPELINE
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 10 — CRM PIPELINE
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={BarChart3} color={AL} title="CRM: Отслеживание каждого клиента" sub="От первого касания до покупки" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
         <Card style={{ padding: 18 }}>
           <h4 style={{ color: T1, fontSize: 13, margin: "0 0 14px", fontWeight: 700 }}>Воронка продаж — вы видите каждый этап:</h4>
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: mobile ? "wrap" : "nowrap" }}>
             {[
               { stage: "Новый лид", count: "—", desc: "Написал в Direct / зашёл на страницу", color: T2, bg: C2 },
-              { stage: "Вовлечён", count: "—", desc: "Ответил боту, задал вопрос", color: "#38bdf8", bg: "#0c4a6e" },
+              { stage: "Вовлечён", count: "—", desc: "Ответил боту, задал вопрос", color: CY, bg: "#0c4a6e" },
               { stage: "Квалифицирован", count: "—", desc: "Продукт / бизнес / консультация", color: AL, bg: "#312e81" },
               { stage: "Записан", count: "—", desc: "Забронировал время в календаре", color: WR, bg: "#78350f" },
               { stage: "Клиент", count: "—", desc: "Купил / зарегистрировался", color: OK, bg: "#14532d" },
@@ -578,7 +574,7 @@ const slides = [
             ))}
           </div>
         </Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 10 }}>
           <Card style={{ padding: 16 }}>
             <h5 style={{ color: T1, fontSize: 12, fontWeight: 700, margin: "0 0 10px" }}>Что видно в CRM для каждого лида:</h5>
             {[
@@ -614,11 +610,11 @@ const slides = [
     </div>
   ),
 
-  // 10 — BEFORE vs AFTER (NEW)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 11 — BEFORE vs AFTER (NEW)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Repeat} color={AL} title="Ваш день: до и после" sub="Как изменится ваша ежедневная работа" />
-      <div style={{ flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div style={{ flex: 1, display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 16 }}>
         <Card style={{ padding: 18, borderTop: `3px solid ${ER}` }}>
           <h4 style={{ color: ER, fontSize: 14, margin: "0 0 16px", fontWeight: 700 }}>Сейчас (без системы)</h4>
           {[
@@ -663,9 +659,9 @@ const slides = [
     </div>
   ),
 
-  // 11 — TIMELINE
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 12 — TIMELINE
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Clock} color={WR} title="План реализации" sub="4 фазы за 12 недель" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
         {[
@@ -738,12 +734,12 @@ const slides = [
     </div>
   ),
 
-  // 12 — BUDGET (no Zebracat, no ManyChat)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 13 — BUDGET (no Zebracat, no ManyChat)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={DollarSign} color={OK} title="Инвестиции" sub="Стоимость инструментов по фазам" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 12 }}>
           <Card style={{ padding: 16 }} border={`1px solid ${A}30`}>
             <h4 style={{ color: AL, fontSize: 13, margin: "0 0 12px", fontWeight: 700 }}>Платформа (Фаза 1+)</h4>
             {[
@@ -770,11 +766,11 @@ const slides = [
             ))}
           </Card>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
           {[
             { phase: "Фаза 1", cost: "~$97", desc: "GoHighLevel + мостовая страница", color: AL },
             { phase: "Полная работа", cost: "$125-240", desc: "GHL + все ИИ-инструменты", color: WR },
-            { phase: "Наши услуги", cost: "По договору", desc: "Разработка + настройка + ведение", color: OK },
+            { phase: "Проект (все фазы)", cost: "~€6 000", desc: "Разработка + настройка + запуск", color: OK },
           ].map((b, i) => (
             <Card key={i} style={{ textAlign: "center", padding: 16, border: `1px solid ${b.color}30` }}>
               <div style={{ color: T2, fontSize: 10, fontWeight: 600, textTransform: "uppercase" }}>{b.phase}</div>
@@ -785,21 +781,21 @@ const slides = [
         </div>
         <Card style={{ padding: "14px 18px" }} border={`1px solid ${OK}30`}>
           <p style={{ color: T1, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: OK }}>Окупаемость:</strong> <span style={{ color: T2 }}>Одна продажа продуктов LR или регистрация нового партнёра покрывает месячные расходы на инструменты. При 3-5 консультациях в неделю система окупается многократно. Главная инвестиция — начальная настройка.</span>
+            <strong style={{ color: OK }}>~€6 000 — ориентировочная стоимость проекта</strong> <span style={{ color: T2 }}> за все 4 фазы. Оплата разбивается на несколько платежей для удобства. Это моя оценка на основе объёма работ. Финальная цена зависит от того, какие инструменты и решения мы выберем — может быть меньше или больше. После завершения проекта согласуем ежемесячную стоимость обслуживания.</span>
           </p>
         </Card>
-        <Card style={{ padding: "14px 18px", background: `${AL}08` }} border={`1px solid ${AL}30`}>
+        <Card style={{ padding: "14px 18px" }} border={`1px solid ${AL}30`}>
           <p style={{ color: T1, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: AL }}>Минимальный стек инструментов:</strong> <span style={{ color: T2 }}>GoHighLevel заменяет Calendly, CRM, email-платформу, WhatsApp API и Zapier. Добавляем только InVideo AI и Opus Clip для контента. Минимум подписок — максимум результата.</span>
+            <strong style={{ color: OK }}>Окупаемость:</strong> <span style={{ color: T2 }}>Одна продажа продуктов LR или регистрация нового партнёра покрывает месячные расходы на инструменты. При 3-5 консультациях в неделю система окупается многократно.</span>
           </p>
         </Card>
       </div>
     </div>
   ),
 
-  // 13 — EXPECTED RESULTS (realistic, based on 23k TikTok)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 14 — EXPECTED RESULTS (realistic, based on 23k TikTok)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={TrendingUp} color={OK} title="Ожидаемые результаты" sub="Реалистичный прогноз на 3 месяца (база: 23K TikTok)" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ overflowX: "auto" }}>
@@ -824,7 +820,7 @@ const slides = [
                 <tr key={i}>
                   <td style={{ padding: "8px 14px", fontSize: 12, color: T1, fontWeight: 500, background: i % 2 === 0 ? C1 : "transparent", borderBottom: `1px solid ${C2}` }}>{row.m}</td>
                   {row.v.map((v, j) => (
-                    <td key={j} style={{ padding: "8px 14px", fontSize: 13, color: j === 2 ? OK : T1, fontWeight: j === 2 ? 700 : 500, textAlign: "center", background: i % 2 === 0 ? C1 : "transparent", borderBottom: `1px solid ${C2}` }}>{v}</td>
+                    <td key={j} style={{ padding: "8px 14px", fontSize: 13, color: j === 2 ? OK : T1, fontWeight: j === 2 ? 700 : 500, textAlign: "right", background: i % 2 === 0 ? C1 : "transparent", borderBottom: `1px solid ${C2}` }}>{v}</td>
                   ))}
                 </tr>
               ))}
@@ -833,10 +829,10 @@ const slides = [
         </div>
         <div style={{ background: `${WR}08`, border: `1px solid ${WR}30`, borderRadius: 12, padding: "12px 18px" }}>
           <p style={{ color: T2, fontSize: 12, margin: 0, lineHeight: 1.6 }}>
-            <strong style={{ color: WR }}>Важно:</strong> Цифры основаны на вашей существующей базе (23K TikTok) и средних показателях в нише wellness/health. Результаты зависят от качества контента, регулярности публикаций и вовлечённости аудитории. Мы будем отслеживать реальные данные и корректировать стратегию каждые 2 недели.
+            <strong style={{ color: WR }}>Важно:</strong> Цифры основаны на вашей существующей базе (23K TikTok) и средних показателях в нише велнес/здоровье. Результаты зависят от качества контента, регулярности публикаций и вовлечённости аудитории. Мы будем отслеживать реальные данные и корректировать стратегию каждые 2 недели.
           </p>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr 1fr", gap: 10 }}>
           {[
             { label: "Первый лид через бот", value: "Неделя 1-2", desc: "Как только бот и контент заработают", icon: Bot, color: CY },
             { label: "Первая запись", value: "Неделя 2-4", desc: "Первый клиент через автоворонку", icon: Calendar, color: AL },
@@ -854,9 +850,9 @@ const slides = [
     </div>
   ),
 
-  // 14 — GDPR + RISKS (with US-servers note)
-  () => (
-    <div style={{ padding: 36, height: "100%", display: "flex", flexDirection: "column" }}>
+  // 15 — GDPR + RISKS (with US-servers note)
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 36, height: "100%", display: "flex", flexDirection: "column" }}>
       <H icon={Shield} color={WR} title="Безопасность и риски" sub="DSGVO, хранение данных и политики LR" />
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
         <Card style={{ padding: 16 }} border={`1px solid ${CY}30`}>
@@ -864,7 +860,7 @@ const slides = [
             <Lock size={14} color={CY} />
             <span style={{ color: CY, fontWeight: 700, fontSize: 13 }}>DSGVO / GDPR — Защита данных (Германия)</span>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 10 }}>
             {["Double Opt-In на все формы сбора email", "Cookie Consent баннер на мостовой странице", "Datenschutzerklärung (политика конфиденциальности)", "Бот сообщает, что он автоматический (требование Meta)", "Право на удаление данных по запросу", "Impressum на всех страницах (обязательно в DE)"].map((t, i) => <Check key={i}>{t}</Check>)}
           </div>
         </Card>
@@ -876,7 +872,7 @@ const slides = [
           <p style={{ color: T2, fontSize: 12, margin: "0 0 8px", lineHeight: 1.6 }}>
             GHL хранит данные на серверах в США. Это <strong style={{ color: T1 }}>легально для Германии</strong> благодаря EU-US Data Privacy Framework (с июля 2023) и стандартным договорным оговоркам (SCCs).
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 8 }}>
             <div>
               <Check>Подписываем DPA (Data Processing Agreement) с GHL</Check>
               <Check>Указываем в Datenschutzerklärung, что данные обрабатываются в США</Check>
@@ -887,9 +883,9 @@ const slides = [
             </div>
           </div>
         </Card>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: mobile ? "1fr" : "1fr 1fr", gap: 10 }}>
           {[
-            { title: "Политика LR", items: ["Проверим Verhaltenskodex LR перед запуском", "Никаких обещаний дохода или медицинских заявлений", "Фокус на lifestyle/wellness позиционирование", "Корректное использование логотипов и названий LR"], color: WR },
+            { title: "Политика LR", items: ["Проверим Verhaltenskodex LR перед запуском", "Никаких обещаний дохода или медицинских заявлений", "Фокус на lifestyle/велнес позиционирование", "Корректное использование логотипов и названий LR"], color: WR },
             { title: "Защита аккаунта", items: ["Только официальные API (GHL подключается через Meta API)", "Не более 4 Reels в день (безопасный лимит Instagram)", "Бот ведёт себя естественно (задержки, вариации)", "Диверсификация: 3 платформы = защита от блокировки"], color: AL },
           ].map((s, i) => (
             <Card key={i} style={{ padding: 14 }}>
@@ -908,13 +904,13 @@ const slides = [
     </div>
   ),
 
-  // 15 — NEXT STEPS CTA
-  () => (
-    <div style={{ padding: 40, height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+  // 16 — NEXT STEPS CTA
+  ({ mobile }) => (
+    <div style={{ padding: mobile ? 20 : 40, height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
       <div style={{ width: 72, height: 72, borderRadius: 18, background: GR, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24, boxShadow: "0 16px 48px rgba(99,102,241,0.4)" }}>
         <Rocket size={36} color="white" />
       </div>
-      <h2 style={{ fontSize: 30, fontWeight: 800, color: T1, margin: 0 }}>Готовы начать?</h2>
+      <h2 style={{ fontSize: mobile ? 22 : 30, fontWeight: 800, color: T1, margin: 0 }}>Готовы начать?</h2>
       <p style={{ fontSize: 14, color: T2, maxWidth: 480, lineHeight: 1.6, marginTop: 10 }}>
         Чтобы запустить Фазу 1, нам нужно от вас:
       </p>
@@ -946,39 +942,106 @@ const slides = [
 
 export default function Presentation() {
   const [cur, setCur] = useState(0);
+  const [isFs, setIsFs] = useState(false);
+  const [winW, setWinW] = useState(window.innerWidth);
+  const [winH, setWinH] = useState(window.innerHeight);
+  const mobile = winW <= 640;
+  const touchStartX = useRef(null);
   const tot = slides.length;
   const S = slides[cur];
+
+  useEffect(() => {
+    const onResize = () => { setWinW(window.innerWidth); setWinH(window.innerHeight); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
 
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); setCur(c => Math.min(tot - 1, c + 1)); }
       if (e.key === "ArrowLeft") { e.preventDefault(); setCur(c => Math.max(0, c - 1)); }
+      if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleFs(); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [tot]);
 
+  const toggleFs = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (delta < -50) setCur(c => Math.min(tot - 1, c + 1));
+    if (delta > 50) setCur(c => Math.max(0, c - 1));
+  };
+
+  const full = mobile || isFs;
+  const navH = 52;
+  const contentH = full ? winH - navH : Math.min(winH - 120, 820);
+  const waLink = "https://wa.me/4915124130699";
+
   return (
-    <div style={{ width: "100%", maxWidth: 980, margin: "0 auto", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: T1, userSelect: "none" }}>
-      <div style={{ background: BG, borderRadius: 16, overflow: "hidden", boxShadow: "0 24px 80px rgba(0,0,0,0.5)", border: `1px solid ${C2}` }}>
-        <div style={{ height: 640, overflow: "auto" }}><S /></div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 20px", background: C1, borderTop: `1px solid ${C2}` }}>
-          <button onClick={() => setCur(Math.max(0, cur - 1))} disabled={cur === 0} style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 8, border: "none", background: cur === 0 ? "transparent" : C2, color: cur === 0 ? C2 : T1, cursor: cur === 0 ? "default" : "pointer", fontSize: 12, fontWeight: 600 }}>
-            <ChevronLeft size={15} /> Назад
-          </button>
-          <div style={{ display: "flex", gap: 5 }}>
-            {slides.map((_, i) => (
-              <button key={i} onClick={() => setCur(i)} style={{ width: i === cur ? 20 : 7, height: 7, borderRadius: 4, border: "none", background: i === cur ? A : C2, cursor: "pointer", padding: 0, transition: "all 0.3s" }} />
-            ))}
+    <div style={{ width: "100%", maxWidth: full ? "100%" : 1280, margin: "0 auto", padding: full ? 0 : "20px 24px 0", boxSizing: "border-box", fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", color: T1, userSelect: "none" }}>
+      <div style={{ background: BG, borderRadius: full ? 0 : 16, overflow: "hidden", boxShadow: full ? "none" : "0 24px 80px rgba(0,0,0,0.5)", border: full ? "none" : `1px solid ${C2}`, position: "relative" }}>
+        <div
+          style={{ height: contentH, overflow: "auto" }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <div style={{ zoom: full ? 1 : 1.18 }}>
+            <S mobile={mobile} />
           </div>
-          <button onClick={() => setCur(Math.min(tot - 1, cur + 1))} disabled={cur === tot - 1} style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 8, border: "none", background: cur === tot - 1 ? "transparent" : GR, color: cur === tot - 1 ? C2 : "white", cursor: cur === tot - 1 ? "default" : "pointer", fontSize: 12, fontWeight: 600, boxShadow: cur === tot - 1 ? "none" : "0 4px 16px rgba(99,102,241,0.3)" }}>
-            Далее <ChevronRight size={15} />
+        </div>
+        {/* Watermark */}
+        <div style={{ position: "absolute", bottom: navH + 12, right: 16, display: "flex", alignItems: "center", gap: 6, opacity: 0.18, pointerEvents: "none", userSelect: "none" }}>
+          <img src={wsLogo} alt="" style={{ width: 22, height: 22 }} />
+          <span style={{ color: T1, fontSize: 13, fontWeight: 700, letterSpacing: "0.06em" }}>Webspirio</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: mobile ? "8px 10px" : "10px 20px", background: C1, borderTop: `1px solid ${C2}`, height: navH, boxSizing: "border-box" }}>
+          <button onClick={() => setCur(Math.max(0, cur - 1))} disabled={cur === 0} style={{ display: "flex", alignItems: "center", gap: 5, padding: mobile ? "8px 14px" : "7px 14px", borderRadius: 8, border: "none", background: cur === 0 ? "transparent" : C2, color: cur === 0 ? T2 : T1, cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 12, fontWeight: 600 }}>
+            <ChevronLeft size={15} /> {!mobile && "Назад"}
           </button>
+          {mobile ? (
+            <span style={{ color: T2, fontSize: 13, fontWeight: 600 }}>{cur + 1} / {tot}</span>
+          ) : (
+            <div style={{ display: "flex", gap: 5 }}>
+              {slides.map((_, i) => (
+                <button key={i} onClick={() => setCur(i)} style={{ width: i === cur ? 20 : 7, height: 7, borderRadius: 4, border: "none", background: i === cur ? A : C2, cursor: "pointer", padding: 0, transition: "width 0.3s ease" }} />
+              ))}
+            </div>
+          )}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <a href={waLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 8, border: "none", background: "#25D366", color: "white", cursor: "pointer", padding: 0, textDecoration: "none" }} title="WhatsApp: +49 151 24130699">
+              <PhoneCall size={15} />
+            </a>
+            <button onClick={toggleFs} aria-label={isFs ? "Выйти из полноэкранного" : "Полноэкранный режим"} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 8, border: "none", background: C2, color: T2, cursor: "pointer", padding: 0 }} title={isFs ? "Выйти из полноэкранного" : "Полноэкранный режим (F)"}>
+              {isFs ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+            </button>
+            <button onClick={() => setCur(Math.min(tot - 1, cur + 1))} disabled={cur === tot - 1} style={{ display: "flex", alignItems: "center", gap: 5, padding: mobile ? "8px 14px" : "7px 14px", borderRadius: 8, border: "none", background: cur === tot - 1 ? "transparent" : GR, color: cur === tot - 1 ? T2 : "white", cursor: cur === tot - 1 ? "not-allowed" : "pointer", fontSize: 12, fontWeight: 600, boxShadow: cur === tot - 1 ? "none" : "0 4px 16px rgba(99,102,241,0.3)" }}>
+              {!mobile && "Далее"} <ChevronRight size={15} />
+            </button>
+          </div>
         </div>
       </div>
-      <div style={{ textAlign: "center", marginTop: 10, color: T2, fontSize: 11 }}>
-        Слайд {cur + 1} из {tot} — используйте стрелки ← → для навигации
-      </div>
+      {!full && (
+        <div style={{ textAlign: "center", marginTop: 10, color: T2, fontSize: 11 }}>
+          Слайд {cur + 1} из {tot} — используйте стрелки ← → или F для полноэкранного режима
+        </div>
+      )}
     </div>
   );
 }
